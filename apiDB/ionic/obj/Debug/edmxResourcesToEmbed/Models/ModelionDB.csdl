@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Database2ionicModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Begeni">
+    <Key>
+      <PropertyRef Name="begeniId" />
+    </Key>
+    <Property Name="begeniId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="begeniKullaniciId" Type="Int32" Nullable="false" />
+    <Property Name="begeniGonderiId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Gonderi" Relationship="Self.FK_Begeni_ToGonderi" FromRole="Begeni" ToRole="Gonderi" />
+    <NavigationProperty Name="Kullanici" Relationship="Self.FK_Begeni_ToKullanici" FromRole="Begeni" ToRole="Kullanici" />
+  </EntityType>
+  <EntityType Name="Gonderi">
+    <Key>
+      <PropertyRef Name="gonderiId" />
+    </Key>
+    <Property Name="gonderiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="gonderiKullaniciId" Type="Int32" Nullable="false" />
+    <Property Name="gonderiIcerik" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="gonderiTarih" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Begeni" Relationship="Self.FK_Begeni_ToGonderi" FromRole="Gonderi" ToRole="Begeni" />
+    <NavigationProperty Name="Kullanici" Relationship="Self.FK_Gonderi_ToKullanici" FromRole="Gonderi" ToRole="Kullanici" />
+    <NavigationProperty Name="Yorum" Relationship="Self.FK_Table_ToGonderi" FromRole="Gonderi" ToRole="Yorum" />
+  </EntityType>
+  <EntityType Name="Kullanici">
+    <Key>
+      <PropertyRef Name="kullaniciId" />
+    </Key>
+    <Property Name="kullaniciId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="kullaniciAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="sifre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="adSoyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="foto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="rol" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Begeni" Relationship="Self.FK_Begeni_ToKullanici" FromRole="Kullanici" ToRole="Begeni" />
+    <NavigationProperty Name="Gonderi" Relationship="Self.FK_Gonderi_ToKullanici" FromRole="Kullanici" ToRole="Gonderi" />
+    <NavigationProperty Name="Yorum" Relationship="Self.FK_Table_ToKullanici" FromRole="Kullanici" ToRole="Yorum" />
+  </EntityType>
+  <EntityType Name="Yorum">
+    <Key>
+      <PropertyRef Name="yorumId" />
+    </Key>
+    <Property Name="yorumId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="yorumGonderiId" Type="Int32" Nullable="false" />
+    <Property Name="yorumKullaniciId" Type="Int32" Nullable="false" />
+    <Property Name="yorumIcerik" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="yorumTarih" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Gonderi" Relationship="Self.FK_Table_ToGonderi" FromRole="Yorum" ToRole="Gonderi" />
+    <NavigationProperty Name="Kullanici" Relationship="Self.FK_Table_ToKullanici" FromRole="Yorum" ToRole="Kullanici" />
+  </EntityType>
+  <Association Name="FK_Begeni_ToGonderi">
+    <End Role="Gonderi" Type="Self.Gonderi" Multiplicity="1" />
+    <End Role="Begeni" Type="Self.Begeni" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Gonderi">
+        <PropertyRef Name="gonderiId" />
+      </Principal>
+      <Dependent Role="Begeni">
+        <PropertyRef Name="begeniGonderiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Begeni_ToKullanici">
+    <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="1" />
+    <End Role="Begeni" Type="Self.Begeni" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kullanici">
+        <PropertyRef Name="kullaniciId" />
+      </Principal>
+      <Dependent Role="Begeni">
+        <PropertyRef Name="begeniKullaniciId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Gonderi_ToKullanici">
+    <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="1" />
+    <End Role="Gonderi" Type="Self.Gonderi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kullanici">
+        <PropertyRef Name="kullaniciId" />
+      </Principal>
+      <Dependent Role="Gonderi">
+        <PropertyRef Name="gonderiKullaniciId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Table_ToGonderi">
+    <End Role="Gonderi" Type="Self.Gonderi" Multiplicity="1" />
+    <End Role="Yorum" Type="Self.Yorum" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Gonderi">
+        <PropertyRef Name="gonderiId" />
+      </Principal>
+      <Dependent Role="Yorum">
+        <PropertyRef Name="yorumGonderiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Table_ToKullanici">
+    <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="1" />
+    <End Role="Yorum" Type="Self.Yorum" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kullanici">
+        <PropertyRef Name="kullaniciId" />
+      </Principal>
+      <Dependent Role="Yorum">
+        <PropertyRef Name="yorumKullaniciId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Database2ionicEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Begeni" EntityType="Self.Begeni" />
+    <EntitySet Name="Gonderi" EntityType="Self.Gonderi" />
+    <EntitySet Name="Kullanici" EntityType="Self.Kullanici" />
+    <EntitySet Name="Yorum" EntityType="Self.Yorum" />
+    <AssociationSet Name="FK_Begeni_ToGonderi" Association="Self.FK_Begeni_ToGonderi">
+      <End Role="Gonderi" EntitySet="Gonderi" />
+      <End Role="Begeni" EntitySet="Begeni" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Begeni_ToKullanici" Association="Self.FK_Begeni_ToKullanici">
+      <End Role="Kullanici" EntitySet="Kullanici" />
+      <End Role="Begeni" EntitySet="Begeni" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Gonderi_ToKullanici" Association="Self.FK_Gonderi_ToKullanici">
+      <End Role="Kullanici" EntitySet="Kullanici" />
+      <End Role="Gonderi" EntitySet="Gonderi" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Table_ToGonderi" Association="Self.FK_Table_ToGonderi">
+      <End Role="Gonderi" EntitySet="Gonderi" />
+      <End Role="Yorum" EntitySet="Yorum" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Table_ToKullanici" Association="Self.FK_Table_ToKullanici">
+      <End Role="Kullanici" EntitySet="Kullanici" />
+      <End Role="Yorum" EntitySet="Yorum" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

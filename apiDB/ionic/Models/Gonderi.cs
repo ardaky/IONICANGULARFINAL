@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ionic.Models
+namespace ionicFinalProje2.Models
 {
     using System;
     using System.Collections.Generic;
@@ -23,8 +23,8 @@ namespace ionic.Models
     
         public int gonderiId { get; set; }
         public int gonderiKullaniciId { get; set; }
-        public Nullable<System.DateTime> gonderiTarih { get; set; }
         public string gonderiIcerik { get; set; }
+        public Nullable<System.DateTime> gonderiTarih { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Begeni> Begeni { get; set; }

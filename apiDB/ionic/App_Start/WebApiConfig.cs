@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
-namespace ionic
+namespace ionicFinalProje2
 {
     public static class WebApiConfig
     {
@@ -13,7 +13,7 @@ namespace ionic
             // Web API yapılandırması ve hizmetleri
 
             // Web API yolları
-            config.MapHttpAttributeRoutes();     
+            config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
@@ -23,8 +23,6 @@ namespace ionic
 
             EnableCorsAttribute cors = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(cors);
-
-
         }
     }
 }

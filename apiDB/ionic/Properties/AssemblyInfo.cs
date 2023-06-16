@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Bir derlemeyle ilgili Genel Bilgiler aşağıdaki öznitelik kümesi kullanılarak 
 // denetlenir. Bir derlemeyle ilişkilendirilmiş bilgileri değiştirmek için bu
 // öznitelik değerlerini değiştirin.
-[assembly: AssemblyTitle("ionic")]
+[assembly: AssemblyTitle("ionicFinalProje2")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ionic")]
+[assembly: AssemblyProduct("ionicFinalProje2")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Bu proje COM'a açılmışsa aşağıdaki GUID typelib'in ID'si içindir
-[assembly: Guid("f14c60d1-86c0-4918-a3a4-f4c928ef9475")]
+[assembly: Guid("d6ff6070-b04e-4a83-aee7-7d07a5824cad")]
 
 // Bir derlemenin sürüm bilgisi aşağıdaki dört değerden oluşur:
 //

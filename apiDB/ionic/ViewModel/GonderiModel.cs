@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ionic.ViewModel
+namespace ionicFinalProje2.ViewModel
 {
     public class GonderiModel
     {

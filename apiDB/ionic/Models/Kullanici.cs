@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ionic.Models
+namespace ionicFinalProje2.Models
 {
     using System;
     using System.Collections.Generic;

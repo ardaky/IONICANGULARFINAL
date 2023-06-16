@@ -1,17 +1,19 @@
-﻿using ionic.Models;
-using ionic.ViewModel;
+﻿using ionicFinalProje2.Models;
+using ionicFinalProje2.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace ionic.Controllers
+namespace ionicFinalProje2.Controllers
 {
     public class ServisController : ApiController
     {
-        DatabaseIONICEntities db = new DatabaseIONICEntities();
+        Database2ionicEntities db = new Database2ionicEntities();
         SonucModel sonuc = new SonucModel();
 
         #region Kullanici
@@ -140,36 +142,79 @@ namespace ionic.Controllers
                 return sonuc;
             }
 
-            //if (db.Egitim.Count(s => s.egitimiVerenId == kullaniciId) > 0)
-            //{
-            //    sonuc.islem = false;
-            //    sonuc.mesaj = "Eğitim veren eğitmenlerin kaydının silinebilmesi için verdiği eğitimleri devretmesi veya kapatması gerekir !";
-            //    return sonuc;
-            //}
+            List<BegeniModel> begeniler = begeniByKullanici(kullaniciId);
+            foreach (var i in begeniler)
+            {
+                begeniSil(i.begeniId);
+            }
 
-            //List<YorumModel> yorumlar = yorumByKullanici(kullaniciId);
-            //foreach (var i in yorumlar)
-            //{
-            //    yorumSil(i.yorumId);
-            //}
+            List<YorumModel> yorumlar = yorumListeleByKullanici(kullaniciId);
+            foreach (var i in yorumlar)
+            {
+                begeniSil(i.yorumId);
+            }
 
-            //List<KayitModel> kayitlar = kullaniciEgitimListeleKayit(kullaniciId);
-            //foreach (var i in kayitlar)
-            //{
-            //    kayitSil(i.kayitId);
-            //}
+            List<GonderiModel> gonderiler = gonderiListeleByKullanici(kullaniciId);
+            foreach (var i in gonderiler)
+            {
+                gonderiSil(i.gonderiId);
+            }
 
+            
             db.Kullanici.Remove(kayit);
             db.SaveChanges();
 
             sonuc.islem = true;
-            sonuc.mesaj = "Kullanıcıya ait tüm yorumlar, eğitim kayıtları ve bilgiler silinmiştir.";
+            sonuc.mesaj = "Kullanıcıya ait tüm yorumlar, gönderiler, beğeniler ve bilgiler silinmiştir.";
 
             return sonuc;
         }
 
 
+        [HttpPost]
+        [Route("api/kullanicifotoguncelle")]
+        public SonucModel kullaniciFotoGuncelle(KullaniciFotoModel model)
+        {
+            Kullanici kullanici = db.Kullanici.Where(s => s.kullaniciId == model.kullaniciId).SingleOrDefault();
+            if (kullanici == null)
+            {
+                sonuc.islem = false;
+                sonuc.mesaj = "Kayıt Bulunamadı !";
+                return sonuc;
+            }
 
+            if (kullanici.foto != "profil.jpg")
+            {
+                string yol = System.Web.Hosting.HostingEnvironment.MapPath("~/Dosyalar/" + kullanici.foto);
+                if (File.Exists(yol))
+                {
+                    File.Delete(yol);
+                }
+            }
+
+            string data = model.fotoData;
+
+            string base64 = data.Substring(data.IndexOf(',') + 1);
+            base64 = base64.Trim('\0');
+            byte[] imgbytes = Convert.FromBase64String(base64);
+            string dosyaAdi = kullanici.kullaniciId + model.fotoUzanti.Replace("image/",
+                ".");
+
+            using (var ms = new MemoryStream(imgbytes, 0, imgbytes.Length))
+            {
+                Image img = Image.FromStream(ms, true);
+                img.Save(System.Web.Hosting.HostingEnvironment.MapPath("~/Dosyalar/" + dosyaAdi));
+            }
+
+            kullanici.foto = dosyaAdi;
+            db.SaveChanges();
+
+            sonuc.islem = true;
+            sonuc.mesaj = "Fotoğraf Güncellendi !";
+
+
+            return sonuc;
+        }
 
         #endregion
 
@@ -189,7 +234,7 @@ namespace ionic.Controllers
                 gonderiIcerik = x.gonderiIcerik,
                 gonderiTarih = x.gonderiTarih,
                 gonderiBegeniSayisi = db.Begeni.Count(s => s.begeniGonderiId == x.gonderiId),
-        }).ToList();
+            }).ToList();
 
             foreach (var kayit in liste)
             {
@@ -205,7 +250,7 @@ namespace ionic.Controllers
         [Route("api/gonderibygonderiId/{gonderId}")]
         public GonderiModel gonderiListeleById(int gonderiId)
         {
-            GonderiModel kayit = db.Gonderi.Where(s=> s.gonderiId == gonderiId).Select(x => new GonderiModel()
+            GonderiModel kayit = db.Gonderi.Where(s => s.gonderiId == gonderiId).Select(x => new GonderiModel()
             {
                 gonderiId = x.gonderiId,
                 gonderiKullaniciId = x.gonderiKullaniciId,
@@ -214,7 +259,7 @@ namespace ionic.Controllers
                 gonderiBegeniSayisi = db.Begeni.Count(s => s.begeniGonderiId == x.gonderiId),
             }).FirstOrDefault();
 
-            if(kayit != null)
+            if (kayit != null)
             {
                 kayit.gonderiKullaniciBilgi = kullaniciById(kayit.gonderiKullaniciId);
             }
@@ -228,7 +273,7 @@ namespace ionic.Controllers
         [Route("api/gonderibykullaniciid/{kullaniciId}")]
         public List<GonderiModel> gonderiListeleByKullanici(int kullaniciId)
         {
-            List<GonderiModel> liste = db.Gonderi.Where(s=> s.gonderiKullaniciId == kullaniciId).Select(x => new GonderiModel()
+            List<GonderiModel> liste = db.Gonderi.Where(s => s.gonderiKullaniciId == kullaniciId).Select(x => new GonderiModel()
             {
 
                 gonderiId = x.gonderiId,
@@ -260,7 +305,7 @@ namespace ionic.Controllers
 
             Gonderi yeni = new Gonderi();
             yeni.gonderiKullaniciId = model.gonderiKullaniciId;
-            yeni.gonderiTarih = model.gonderiTarih;
+            yeni.gonderiTarih = DateTime.Now;
             yeni.gonderiIcerik = model.gonderiIcerik;
 
             db.Gonderi.Add(yeni);
@@ -311,7 +356,7 @@ namespace ionic.Controllers
                 return sonuc;
             }
 
-            List<BegeniModel> begeniler = db.Begeni.Where(s=> s.begeniGonderiId == gonderiId).Select(x => new BegeniModel()
+            List<BegeniModel> begeniler = db.Begeni.Where(s => s.begeniGonderiId == gonderiId).Select(x => new BegeniModel()
             {
                 begeniId = x.begeniId,
                 begeniGonderiId = x.begeniGonderiId,
@@ -390,7 +435,7 @@ namespace ionic.Controllers
 
             }).SingleOrDefault();
 
-            if(kayit != null)
+            if (kayit != null)
             {
                 kayit.yorumKullaniciBilgi = kullaniciById(kayit.yorumKullaniciId);
             }
@@ -403,7 +448,7 @@ namespace ionic.Controllers
         [Route("api/yorumlistelebykullanici/{kullaniciId}")]
         public List<YorumModel> yorumListeleByKullanici(int kullaniciId)
         {
-            List<YorumModel> liste = db.Yorum.Where(s=> s.yorumKullaniciId == kullaniciId).Select(x => new YorumModel()
+            List<YorumModel> liste = db.Yorum.Where(s => s.yorumKullaniciId == kullaniciId).Select(x => new YorumModel()
             {
                 yorumId = x.yorumId,
                 yorumGonderiId = x.yorumGonderiId,
@@ -494,7 +539,7 @@ namespace ionic.Controllers
         #endregion
 
         #region Begeni
-        
+
         // bir gönderinin tüm beğenilerini döndürür.
         [HttpGet]
         [Route("api/begenilistelebygonderi/{gonderiId}")]
@@ -502,12 +547,12 @@ namespace ionic.Controllers
         {
             List<BegeniModel> liste = db.Begeni.Select(x => new BegeniModel()
             {
-            
+
                 begeniId = x.begeniId,
                 begeniGonderiId = x.begeniGonderiId,
                 begeniKullaniciId = x.begeniKullaniciId,
                 begeniKullaniciAdi = x.Kullanici.adSoyad
-         
+
 
             }).ToList();
 
@@ -553,7 +598,7 @@ namespace ionic.Controllers
             db.SaveChanges();
 
             sonuc.islem = true;
-            sonuc.mesaj = "Beğeni Yapıldı !";          
+            sonuc.mesaj = "Beğeni Yapıldı !";
             return sonuc;
         }
 
@@ -562,13 +607,13 @@ namespace ionic.Controllers
         public SonucModel begeniSil(int begeniId)
         {
             Begeni kayit = db.Begeni.Where(s => s.begeniId == begeniId).SingleOrDefault();
-            if(kayit == null)
+            if (kayit == null)
             {
                 sonuc.islem = false;
                 sonuc.mesaj = "Beğeni bulunamadı !";
                 return sonuc;
             }
-            
+
             db.Begeni.Remove(kayit);
             db.SaveChanges();
 
@@ -578,6 +623,5 @@ namespace ionic.Controllers
         }
 
         #endregion
-
     }
 }
