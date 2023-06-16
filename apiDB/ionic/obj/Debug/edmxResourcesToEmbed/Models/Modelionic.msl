@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DatabaseIONICModelStoreContainer" CdmEntityContainer="DatabaseIONICEntities">
+    <EntitySetMapping Name="Begeni">
+      <EntityTypeMapping TypeName="DatabaseIONICModel.Begeni">
+        <MappingFragment StoreEntitySet="Begeni">
+          <ScalarProperty Name="begeniId" ColumnName="begeniId" />
+          <ScalarProperty Name="begeniKullaniciId" ColumnName="begeniKullaniciId" />
+          <ScalarProperty Name="begeniGonderiId" ColumnName="begeniGonderiId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Gonderi">
+      <EntityTypeMapping TypeName="DatabaseIONICModel.Gonderi">
+        <MappingFragment StoreEntitySet="Gonderi">
+          <ScalarProperty Name="gonderiIcerik" ColumnName="gonderiIcerik" />
+          <ScalarProperty Name="gonderiId" ColumnName="gonderiId" />
+          <ScalarProperty Name="gonderiKullaniciId" ColumnName="gonderiKullaniciId" />
+          <ScalarProperty Name="gonderiTarih" ColumnName="gonderiTarih" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Kullanici">
+      <EntityTypeMapping TypeName="DatabaseIONICModel.Kullanici">
+        <MappingFragment StoreEntitySet="Kullanici">
+          <ScalarProperty Name="kullaniciId" ColumnName="kullaniciId" />
+          <ScalarProperty Name="kullaniciAdi" ColumnName="kullaniciAdi" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="sifre" ColumnName="sifre" />
+          <ScalarProperty Name="adSoyad" ColumnName="adSoyad" />
+          <ScalarProperty Name="foto" ColumnName="foto" />
+          <ScalarProperty Name="rol" ColumnName="rol" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Yorum">
+      <EntityTypeMapping TypeName="DatabaseIONICModel.Yorum">
+        <MappingFragment StoreEntitySet="Yorum">
+          <ScalarProperty Name="yorumId" ColumnName="yorumId" />
+          <ScalarProperty Name="yorumGonderiId" ColumnName="yorumGonderiId" />
+          <ScalarProperty Name="yorumKullaniciId" ColumnName="yorumKullaniciId" />
+          <ScalarProperty Name="yorumIcerik" ColumnName="yorumIcerik" />
+          <ScalarProperty Name="yorumTarih" ColumnName="yorumTarih" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
