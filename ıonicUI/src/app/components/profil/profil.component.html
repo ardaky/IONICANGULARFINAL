@@ -1,0 +1,39 @@
+
+
+
+<ion-content class="profile-content" style="text-align: center;">
+  <ion-row class="user-details-wrapper">
+    <ion-col size="6" class="user-image-wrapper">
+      <img class="user-image" [src]="servis.siteUrl + '/Dosyalar/' + aktifKullanici?.foto">
+    </ion-col>
+    <ion-col class="user-info-wrapper" size="12">
+      <h3>{{aktifKullanici?.adSoyad}}</h3>
+      <p>@ardakerem</p>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12">
+      <h4>E-Posta</h4>
+      <p>
+        {{aktifKullanici?.email}}
+      </p>
+    </ion-col>
+    <ion-col size="12">
+      <h4>Rol</h4>
+      <p *ngIf="aktifKullanici?.rol == 0">
+        Admin
+      </p>
+      <p *ngIf="aktifKullanici?.rol == 1">Kullanıcı</p>
+    </ion-col>
+    <ion-col size="12">
+      <h4>Gönderiler</h4>
+      <ion-card *ngFor="let gonderi of gonderiler">
+        <ion-card-content>
+          {{gonderi.gonderiIcerik}}
+
+        </ion-card-content>
+        <ion-button (click)="gonderiSil(gonderi.gonderiId)">Gönderiyi Sil</ion-button>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-content>

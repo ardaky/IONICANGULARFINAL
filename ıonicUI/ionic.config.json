@@ -1,0 +1,7 @@
+{
+  "name": "vize",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

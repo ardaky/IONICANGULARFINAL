@@ -1,0 +1,51 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar></ion-toolbar>
+</ion-header>
+
+<ion-content class="sign-in-content">
+  <h2 class="auth-title" style="text-align: center; margin-bottom: 6vw;">
+    Giriş Yapın
+  </h2>
+  <form  >
+    <ion-list class="inputs-list" lines="full">
+      <ion-item class="input-item">
+        <ion-input type="text" placeholder="Kullanıcı Adınız" #kadi clearInput autocapitalize="off"></ion-input>
+      </ion-item>
+      <div class="error-container">
+        <ng-container>
+          <div class="error-message">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <span></span>
+          </div>
+        </ng-container>
+      </div>
+
+      <ion-item class="input-item">
+        <ion-input type="password" placeholder="Parola" #parola></ion-input>
+      </ion-item>
+      <div class="error-container">
+        <ng-container >
+          <div class="error-message">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <span></span>
+          </div>
+        </ng-container>
+      </div>
+    </ion-list>
+
+    <ion-button class="sign-in-btn" expand="block" (click)="oturumAc(kadi.value,parola.value)">Giriş Yap</ion-button>
+    <div class="error-container" >
+      <div class="error-message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>Şifre veya ıd yanlışsa uyarı</span>
+      </div>
+    </div>
+    <ion-row class="sign-up-btn-wrapper">
+      <ion-button class="sign-up-btn" fill="clear" [routerLink]="['/sign-up']">
+        Hesabın mı yok ? Hemen kayıt ol !
+      </ion-button>
+    </ion-row>
+  </form>
+
+
+</ion-content>

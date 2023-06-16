@@ -1,0 +1,59 @@
+<ion-item>
+  <ion-textarea  [autoGrow]="true" fill="solid" placeholder="Ne düşünüyorsun ?" name="gonderiyazi" #gonderiyazi></ion-textarea>
+  <ion-button (click)="gonderiEkle(gonderiyazi.value)">Gönder</ion-button>
+</ion-item>
+
+
+<ion-card *ngFor="let a of gonderiler">
+  <ion-card-header>
+    
+    <ion-card-title>{{a.gonderiKullaniciBilgi.adSoyad}} </ion-card-title>
+    <ion-avatar item-start>
+      <img
+      [src]="apiServis.siteUrl + '/Dosyalar/' +  a.gonderiKullaniciBilgi.foto">
+    </ion-avatar>
+    <ion-card-subtitle>{{a.gonderiKullaniciBilgi.kullaniciAdi}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {{a.gonderiTarih}}</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    {{a.gonderiIcerik}}
+  <br>
+  
+  </ion-card-content>
+  
+  <ion-button size="small" style="margin-bottom: 3vw; margin-left: 5vw;" (click)="begeniEkle(a.gonderiId)">Beğen</ion-button>
+  <ion-button size="small" style="margin-bottom: 3vw; margin-left: 3vw;" id="open-modal{{a.gonderiId}}" (click)="gonderiYorumlariListele(a.gonderiId)">Yorum Yap</ion-button>
+  
+
+  <ion-modal trigger="open-modal{{a.gonderiId}}" #yorumModal>
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start" (click)="cancel()">
+            <ion-button (click)="yorumModal.dismiss()" >Kapat</ion-button>
+          </ion-buttons>
+          <ion-title>Yorumlar</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-textarea  [autoGrow]="true" fill="solid" placeholder="Bu gönderiye bir yorum yaz ?" name="yorumyaz" #yorumyaz></ion-textarea>
+          <ion-button (click)="yorumEkle(yorumyaz.value)">Gönder</ion-button>
+        </ion-item>
+        <ion-item *ngFor="let i of yorumlar">
+          <ion-avatar item-start>
+            <img
+            [src]="apiServis.siteUrl + '/Dosyalar/' + i.yorumKullaniciBilgi.foto">
+          </ion-avatar>
+          <ion-label position="stacked">{{i.yorumKullaniciBilgi.adSoyad}}</ion-label>
+          <p position="stacked">{{i.yorumIcerik}}</p>
+        </ion-item>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <p style="margin-left: 3vw; margin-bottom: 3vw; margin-top: 0vw;"> Bu gönderiyi <span style="color:rgb(0, 0, 255)
+  ">{{a.gonderiBegeniSayisi}} kişi </span> beğendi.</p>
+  
+</ion-card>
+
